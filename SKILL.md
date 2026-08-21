@@ -2,7 +2,7 @@
 name: schematize-qa
 metadata:
   version: 0.2.0
-description: Q.A. / Quality Assurance da casa — a disciplina inteira de TESTE, agnóstica de linguagem, que prova que o software faz o que diz **com evidência**, não por fé. Rege a estratégia de teste e a pirâmide (unit → componente → integração → e2e), o princípio de que teste testa **COMPORTAMENTO** (o que o sistema faz), não "renderizou/montou" (teste tautológico é decoração); o "verde de verdade" — smoke com asserção de conteúdo + assertion negativa + **self-check que força uma falha conhecida** (smoke que nunca falha está cego); acessibilidade (axe/WCAG 2.2 AA) e **regressão visual** como testes que travam; testes de **contrato** (consumer-driven) e de **dados** (expectations/quarentena, casando com a schematize-data); **flaky tests** (detecção, determinismo e quarentena com prazo e dono — nunca silenciar pra sempre); **cobertura útil, não vaidade** (mínimos por camada + mutation testing; line coverage é piso, não meta; caminho de erro obrigatório); o fluxo **plan-first** (planeja o Q.A., gera um MD de passo a passo, **pede aprovação antes de rodar** — nada às cegas, passo destrutivo só com gate, watchdog que retoma de checkpoint sem retry infinito); os **gates de teste/a11y/CWV no CI que travam o merge** e NÃO se desligam "temporariamente"; e o Q.A. como parte inegociável da **Definition of Done**. Saída durável no `<projeto>_archive/qa/`. Use SEMPRE que for planejar, escrever, revisar, rodar ou auditar QUALQUER teste — unit, componente, integração, e2e, smoke, a11y, regressão visual, contrato, dados, property-based, mutation, carga/perf funcional — ou definir cobertura, montar o test kit, tratar teste flaky, configurar os gates de CI de teste, ou fechar uma entrega pela DoD — mesmo sem citar "teste" ou "Q.A.". Contém pisos inegociáveis (teste testa comportamento e é visto FALHAR no vermelho; cobertura é contrato — não se baixa a régua pra passar CI; smoke prova conteúdo, não status; a11y e flaky travam; Q.A. é plan-first e roda com aprovação; **teste NUNCA dispara efeito externo real** — endereço no domínio de teste em rota nula, provider = sink, cap por execução, e a caixa se confere **lendo do sink**; gate não se desliga "por enquanto"; archive obrigatório) que vetam o verde mentiroso. **Fronteiras:** segurança ofensiva (pentest de rejeição, injeção, IDOR/BOLA, cross-tenant, red-team) é a **schematize-pentest**; auditoria de histórico ("os checklists criados foram sanados?") é a **schematize-audit**; a engenharia base (DoD, archive, índice) é a **schematize-engineering** — esta skill é o **COMO** do teste que a engineering apenas exige.
+description: Q.A. da casa — a disciplina inteira de TESTE, agnóstica de linguagem, que prova que o software faz o que diz COM EVIDÊNCIA, não por fé. Rege a pirâmide (unit → componente → integração → e2e); o princípio de que teste testa COMPORTAMENTO, não "renderizou"; o "verde de verdade" (smoke com asserção de conteúdo + assertion negativa + self-check que força uma falha conhecida — smoke que nunca falha está cego); a11y (axe/WCAG 2.2 AA) e regressão visual como testes que travam; contrato e dados; flaky (detecção, determinismo, quarentena com prazo e dono); cobertura útil, não vaidade; o fluxo plan-first (planeja, gera o MD, PEDE APROVAÇÃO antes de rodar); os gates de CI que travam o merge e não se desligam "temporariamente"; e o Q.A. como parte da DoD. Use SEMPRE que for planejar, escrever, revisar, rodar ou auditar QUALQUER teste, definir cobertura, tratar flaky ou configurar gate de CI. Pisos: teste é visto FALHAR no vermelho; cobertura é contrato; teste NUNCA dispara efeito externo real — confere-se lendo do sink.
 ---
 
 # Q.A. / Quality Assurance da Casa (schematize-qa)
@@ -13,8 +13,8 @@ comportamento** (o que o sistema faz), foi visto **falhar no vermelho** quando o
 o runner **o enxerga**. Tudo o mais — cobertura de linha, "renderizou", snapshot que ninguém lê — é
 decoração até que o teste prove que reprova o caso ruim.
 
-Esta skill foi **extraída da `schematize-engineering`** (as references `testes.md` + `testes-execucao.md`
-e o comando `/eng-qa`) pra rodar solta e agnóstica de linguagem. A engineering mantém só o **piso
+Esta skill foi **extraída da `schematize-engineering`** (as antigas references *testes* e *testes-execucao*
+e o comando `eng-qa`, hoje removido) pra rodar solta e agnóstica de linguagem. A engineering mantém só o **piso
 mínimo** — "a DoD exige testes verdes" — e delega o **COMO** pra cá. Onde a engenharia diz *que* tem
 que ter teste, esta skill diz *como* o teste é escrito, rodado, medido e gated.
 
@@ -135,7 +135,7 @@ Não escreva do zero o que já está bundlado (movido da engineering pra cá):
 - `scripts/test-skeleton.sh` — esqueleto obrigatório de `tests/<mode>/<name>.sh` (status + shape do
   body + assertion negativa).
 - `scripts/smoke-selfcheck.sh` — o meta-teste anti "verde mentiroso": prova que o runner **consegue
-  reportar FAIL** (normal=0, `--self-check`=1).
+  reportar FAIL** (normal=0; `--self-check`=0 **quando reportou o FAIL**, 1 quando NÃO reportou — smoke cego).
 - `scripts/simulated/run.py` — scaffold do engine `rotas × personas × injections` (cobertura total de
   rotas: acessível pra quem deve, bloqueada pra quem não deve). O detalhe **ofensivo** das injeções é
   governado pela `schematize-pentest`; aqui o foco é **acessibilidade/cobertura de rota**.

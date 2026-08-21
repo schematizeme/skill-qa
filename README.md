@@ -7,7 +7,7 @@
 
 Pacote de **skill normativa para [Claude Code](https://claude.com/claude-code)**.
 Parte do catálogo **schematize skills**. **Extraída da `schematize-engineering`** (as references
-`testes.md` + `testes-execucao.md` e o comando `/eng-qa`) pra rodar solta e agnóstica de linguagem:
+as antigas references *testes* e *testes-execucao*, e o comando `eng-qa`, hoje removido) pra rodar solta e agnóstica de linguagem:
 a engineering mantém só o **piso mínimo** ("a DoD exige testes verdes") e delega o **COMO** pra cá.
 
 ## Instalar
