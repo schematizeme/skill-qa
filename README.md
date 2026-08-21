@@ -37,7 +37,7 @@ unzip skill-qa.zip -d .claude/skills/
 
 ## O que tem dentro
 
-- **SKILL.md** — o contrato: 9 pisos inegociáveis (teste testa comportamento e é visto falhar no
+- **SKILL.md** — o contrato: 10 pisos inegociáveis (teste testa comportamento e é visto falhar no
   vermelho; o runner enxerga o teste; cobertura é contrato — não se baixa a régua; smoke prova
   conteúdo, não status; a11y e regressão visual travam; flaky é bug com quarentena; Q.A. é
   plan-first com aprovação; gate de CI não se desliga "por enquanto"; Q.A. é DoD e mora no archive)

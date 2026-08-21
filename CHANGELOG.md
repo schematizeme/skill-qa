@@ -1,5 +1,17 @@
 # Changelog — schematize-qa
 
+Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
+com versionamento [SemVer](https://semver.org/lang/pt-BR/).
+
+## [0.3.0] — 2026-08-21
+As três técnicas que a description prometia e o corpo não entregava. A vistoria de 2026-08-21: `load` **não existia no contrato do CLI** (enquanto `execucao.md` já falava do modo como se existisse), `grep 'k6|Locust|benchmark|fuzz|testcontainers'` = **0**, e mutation tinha **nome de ferramenta e nenhum procedimento nem threshold**.
+
+### Adicionado
+- **`categorias.md` §11 — Property-based:** as **4 formas** de enunciar a propriedade (ida-e-volta, invariante, oráculo alternativo, metamórfica), as entradas que doem, **semente fixa e logada** (sem ela a técnica vira flaky irreproduzível) e a regra que faz a suíte crescer por descoberta: **todo contraexemplo vira teste de exemplo versionado**. Limiar: 100% dos módulos de domínio crítico com ao menos uma propriedade (lista nominal — módulo sem propriedade sai no relatório como **descoberto**, não como "não aplicável"), ≥1000 casos no nightly, ≥100 no PR, contraexemplo **reprova**.
+- **`categorias.md` §12 — Mutation:** o porquê antes do número (linha coberta prova que o código **executou**; mutante morto prova que alguém **verificou o resultado** — teste sem asserção dá 100% de linha e 0% de mutation), a **triage do sobrevivente em três caixas** (teste faltando · equivalente com justificativa escrita · código morto, que se apaga em vez de testar) e os limiares: **≥ 80%** no domínio crítico com queda > **2pp** reprovando, **≥ 70%** nos arquivos alterados do PR com **mutante sobrevivente novo** reprovando, resto do repo medido e nunca gate. Equivalentes fora do denominador, e lista de equivalentes acima de 10% é cheiro. Baixar o piso é **ADR**.
+- **`categorias.md` §13 — Carga e performance:** o vocabulário separado (smoke de carga · stress · **soak** · spike · benchmark), o procedimento com **SLO escrito antes** (os mesmos números do SLO de produção, não os que fazem o teste passar), carga modelada do usuário real (ramp-up gradual — subida instantânea mede o autoscaler), ambiente declarado, **p95 e p99** (a média esconde a cauda) e o fechamento com perfil, porque "ficou lento" não gera correção. Limiares: endpoint crítico sem cenário é **cobertura faltante**; p95 **+10%** contra o baseline reprova; erro acima do SLO reprova **sempre**; soak ≥1h com memória estável; spike volta ao normal em ≤2min. E o aviso na frente: **carga é o maior multiplicador de efeito externo que existe** — só roda com sink, guard verificado e cap.
+- **`execucao.md`** — o contrato do CLI ganhou `test property`, `test mutation` e `test load`, e o `full` passou a incluir `property`. A promessa da description e o contrato voltaram a falar a mesma língua.
+
 ## [0.2.0] — 2026-08-20
 
 Propagação do piso **"efeito externo NUNCA sai de não-produção"** (normativa na
@@ -51,8 +63,6 @@ laço de teste para endereços sintéticos, com reputação de IP e domínio que
 - **`references/categorias.md`** §3 (integração) e §4 (e2e) passam a exigir explicitamente que fluxo
   que notifica asserte a notificação **lendo do sink**; §4 (seeds/personas) da `execucao.md` ancora o
   endereço das personas no §5.
-
-Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/). Versionamento semântico.
 
 ## [0.1.0] — 2026-08-18
 
