@@ -46,7 +46,7 @@ assim" e este piso, **o piso vence**. Consulte o reference antes de agir — nã
 10. **Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` →
    `references/orquestracao.md` §9). No modo autônomo, os subagents executores rodam em **`sonnet`
    por default**; o principal só planeja/revisa. Falhou → mesmo subagent corrige (≤2 rodadas) →
-   re-decompõe → só então `opus`, com motivo registrado.
+   re-decompõe → só então `opus`, com motivo registrado. **Sem frota ociosa:** agent idle com pendência executável volta ao trabalho; pendência que depende de outro agent → mata e enfileira com gatilho de dependência; terminou → mata (§9.6).
 
 ## Como se testa aqui
 

@@ -126,7 +126,7 @@ Independente do reference, estes limites nunca são cruzados:
 11. **Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` →
    `references/orquestracao.md` §9). Modo autônomo: subagents executores em **`sonnet` por
    default**, principal só planeja/revisa; escada: mesmo subagent (≤2 rodadas) → re-decompor →
-   `opus` (motivo registrado).
+   `opus` (motivo registrado). **Sem frota ociosa:** agent idle com pendência executável volta ao trabalho; pendência que depende de outro agent → mata e enfileira com gatilho de dependência; terminou → mata (§9.6).
 
 > Regra de bolso: se você **não viu o teste falhar de propósito**, você não sabe se ele funciona.
 > Cobertura mede o que o teste **executa**; só o vermelho prova o que ele **verifica**.
