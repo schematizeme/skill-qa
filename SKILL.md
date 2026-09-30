@@ -123,10 +123,7 @@ Independente do reference, estes limites nunca são cruzados:
     "1.000 contas criadas" de "1.000 e-mails enviados"; o incidente das 5.000 contas foi exatamente um
     laço de teste sem cap contra um provider real. Procedimento em `references/execucao.md` §5;
     asserção em `references/categorias.md` §9.
-11. **Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` →
-   `references/orquestracao.md` §9). Modo autônomo: subagents executores em **`sonnet` por
-   default**, principal só planeja/revisa; escada: mesmo subagent (≤2 rodadas) → re-decompor →
-   `opus` (motivo registrado). **Sem frota ociosa:** agent idle com pendência executável volta ao trabalho; pendência que depende de outro agent → mata e enfileira com gatilho de dependência; terminou → mata (§9.6).
+11. <!-- herdado:engineering/orquestracao:bullet -->**Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` → `references/orquestracao.md` §9). O principal só planeja/decompõe/despacha/supervisiona/revisa; ação onerosa vira micro-tasks; subagents em `sonnet` por padrão (falhou → mesmo subagent corrige, até 2 rodadas → re-decompõe → só então `opus`, com motivo registrado no checkpoint). No `overdev`, cada item do checklist é executado por subagent `sonnet` e revisado pelo principal (diff + gate) antes do `- [x]`. **Sem frota ociosa:** agent idle com pendência executável volta ao trabalho; pendência que depende de outro agent → mata e enfileira com gatilho de dependência; terminou → mata (§9.6).<!-- /herdado -->
 
 > Regra de bolso: se você **não viu o teste falhar de propósito**, você não sabe se ele funciona.
 > Cobertura mede o que o teste **executa**; só o vermelho prova o que ele **verifica**.

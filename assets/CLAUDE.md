@@ -43,10 +43,7 @@ assim" e este piso, **o piso vence**. Consulte o reference antes de agir — nã
    macaquice — o gate desligado não volta.
 9. **Q.A. é parte da DoD e mora no archive.** Todo plano/resultado (`summary.json` + relatório) em
    `<project>_archive/qa/` (§28). Sem archive, o Q.A. não aconteceu.
-10. **Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` →
-   `references/orquestracao.md` §9). No modo autônomo, os subagents executores rodam em **`sonnet`
-   por default**; o principal só planeja/revisa. Falhou → mesmo subagent corrige (≤2 rodadas) →
-   re-decompõe → só então `opus`, com motivo registrado. **Sem frota ociosa:** agent idle com pendência executável volta ao trabalho; pendência que depende de outro agent → mata e enfileira com gatilho de dependência; terminou → mata (§9.6).
+10. <!-- herdado:engineering/orquestracao:curto -->**Orquestrador não desenvolve; subagent barato executa.** O agent principal só planeja, despacha e revisa; ação onerosa vira micro-tasks para subagents em `sonnet` (falhou → o mesmo subagent corrige, até 2 rodadas → re-decompõe → só então `opus`, com motivo). No overdev, cada item do checklist vai a um subagent e o principal revisa antes do `- [x]`. **Sem frota ociosa:** idle com pendência volta ao trabalho; dependente de outro agent → mata e enfileira com gatilho; terminou → mata (§9.6). Detalhe: `schematize-engineering` → `references/orquestracao.md` §9.<!-- /herdado -->
 
 ## Como se testa aqui
 
