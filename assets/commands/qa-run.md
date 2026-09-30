@@ -14,7 +14,7 @@ Carregue o plano de `${ARGUMENTS:-<projeto>_archive/qa/<último>}`. Rode **só**
 - **Faseado e assistido** — executa por fase, **pausa entre fases**, mostra o parcial e só segue com o
   "continuar". Default pra staging sensível e qualquer passo destrutivo.
 - **De uma vez (autônomo)** — paraleliza categorias independentes (unit/a11y/`simulated`/contrato em
-  workers/subagents) respeitando dependências e backpressure; um **watchdog** retoma de checkpoint
+  workers/subagents) respeitando dependências e backpressure; **os subagents executores rodam em `sonnet` por default** (o principal só planeja/revisa; falhou → mesmo subagent corrige ≤2 rodadas → re-decompõe → só então `opus`, com motivo registrado — `schematize-engineering` → `references/orquestracao.md` §9); um **watchdog** retoma de checkpoint
   **idempotente** até concluir. Parada explícita: tudo concluído **ou** falha bloqueante escala pro
   humano. **Sem retry infinito** (`references/flaky.md`).
 

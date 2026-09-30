@@ -50,6 +50,15 @@ planejamento, aprovação humana e execução controlada. Comandos: `/qa-plan` (
    - **Multiagentes para a execução** — paralelizar categorias independentes (ex.: unit, a11y,
      `simulated`, contrato em workers separados), respeitando dependências declaradas e limites de
      concorrência (backpressure).
+   - **Quem executa (custo)** — piso "Orquestrador não desenvolve; subagent barato executa"
+     (`schematize-engineering` → `references/orquestracao.md` §9). Cada worker/subagent executor
+     roda em **`sonnet` por default**; o agent principal **só planeja, despacha, supervisiona e
+     revisa** (lê o resultado/`summary.json`, confere o gate) — não roda a execução do Q.A. ele
+     mesmo. Cada categoria/passo é uma **micro-task** com escopo, comando e critério de pronto no
+     brief. Falhou → devolve ao **mesmo subagent** com o erro concreto (até 2 rodadas) →
+     re-decompõe → só então **`opus`**, com o motivo da escalada no checkpoint (que ganha colunas
+     modelo e rodadas de correção). Esgotou Opus → escala pro humano (a mesma parada explícita
+     abaixo). Isto decide *quem executa*; não altera o plano aprovado, os gates nem o watchdog.
    - **Cron/watchdog de continuidade** — um agendador supervisiona e **retoma de checkpoint até
      concluir**, sem intervenção manual se um worker cair. "Conclusão" é condição de parada explícita:
      todos os passos aprovados terminaram, **ou** uma falha bloqueante escalou para o humano.

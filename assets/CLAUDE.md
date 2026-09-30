@@ -43,6 +43,10 @@ assim" e este piso, **o piso vence**. Consulte o reference antes de agir — nã
    macaquice — o gate desligado não volta.
 9. **Q.A. é parte da DoD e mora no archive.** Todo plano/resultado (`summary.json` + relatório) em
    `<project>_archive/qa/` (§28). Sem archive, o Q.A. não aconteceu.
+10. **Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` →
+   `references/orquestracao.md` §9). No modo autônomo, os subagents executores rodam em **`sonnet`
+   por default**; o principal só planeja/revisa. Falhou → mesmo subagent corrige (≤2 rodadas) →
+   re-decompõe → só então `opus`, com motivo registrado.
 
 ## Como se testa aqui
 

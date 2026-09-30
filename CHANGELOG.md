@@ -3,6 +3,21 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.4.0] — 2026-09-30
+Pedido do dono, por **custo**: o agent principal não desenvolve — planeja e despacha; subagents
+executam em `sonnet` por padrão e `opus` só após falha. Regra canônica em `schematize-engineering`
+→ `references/orquestracao.md` §9.
+
+### Adicionado
+- **Modo autônomo com executores baratos** (`references/execucao.md`, `assets/commands/qa-run.md`):
+  subagents/workers em `sonnet` por default; principal só planeja/revisa; escada mesmo subagent
+  (≤2 rodadas) → re-decompor → `opus` com motivo registrado.
+- Piso "Orquestrador não desenvolve; subagent barato executa" em `SKILL.md` e `assets/CLAUDE.md`.
+
+### Mantido (piso inalterado)
+- Plan-first com aprovação, gates que travam, passo destrutivo só no plano aprovado + gate de
+  ambiente, watchdog sem retry infinito, efeito externo em sink, archive.
+
 ## [0.3.0] — 2026-08-21
 As três técnicas que a description prometia e o corpo não entregava. A vistoria de 2026-08-21: `load` **não existia no contrato do CLI** (enquanto `execucao.md` já falava do modo como se existisse), `grep 'k6|Locust|benchmark|fuzz|testcontainers'` = **0**, e mutation tinha **nome de ferramenta e nenhum procedimento nem threshold**.
 

@@ -123,6 +123,10 @@ Independente do reference, estes limites nunca são cruzados:
     "1.000 contas criadas" de "1.000 e-mails enviados"; o incidente das 5.000 contas foi exatamente um
     laço de teste sem cap contra um provider real. Procedimento em `references/execucao.md` §5;
     asserção em `references/categorias.md` §9.
+11. **Orquestrador não desenvolve; subagent barato executa** (`schematize-engineering` →
+   `references/orquestracao.md` §9). Modo autônomo: subagents executores em **`sonnet` por
+   default**, principal só planeja/revisa; escada: mesmo subagent (≤2 rodadas) → re-decompor →
+   `opus` (motivo registrado).
 
 > Regra de bolso: se você **não viu o teste falhar de propósito**, você não sabe se ele funciona.
 > Cobertura mede o que o teste **executa**; só o vermelho prova o que ele **verifica**.
@@ -140,7 +144,6 @@ Não escreva do zero o que já está bundlado (movido da engineering pra cá):
 - `scripts/simulated/run.py` — scaffold do engine `rotas × personas × injections` (cobertura total de
   rotas: acessível pra quem deve, bloqueada pra quem não deve). O detalhe **ofensivo** das injeções é
   governado pela `schematize-pentest`; aqui o foco é **acessibilidade/cobertura de rota**.
-
 ## Relação com as outras skills
 
 - **schematize-engineering** — a **BASE**. Ela **exige** teste (DoD §35, archive §28, índice §39) e
