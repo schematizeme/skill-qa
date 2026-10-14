@@ -180,6 +180,10 @@ Percy/Chromatic/Loki.
   o pipeline do produtor falha — **antes** de quebrar o consumidor em produção.
 - **Schema/OpenAPI como fonte:** validar request/response contra o schema; breaking change no shape
   exige **nova versão** (compat back/forward — casa com `schematize-data`).
+- **Dona do contrato é a `schematize-api`** (OpenAPI 3.1 contract-first, erros, paginação, Sunset, gate
+  `check-api.sh`): aqui só se testa que o contrato é cumprido; o desenho e o diff de breaking são de lá.
+- **Teste de tracking (analytics)** é o mesmo padrão de contrato: o tracking plan é a fonte
+  (`schematize-analytics`), e o teste assere evento, propriedades fechadas e ausência de disparo sem consentimento.
 
 **MUST — o contrato quebra no CI de QUEM MUDOU, não em produção.** A verificação do produtor roda no
 pipeline dele; publicar sem verificar é empurrar o defeito para o consumidor descobrir em runtime.

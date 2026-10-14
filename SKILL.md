@@ -3,9 +3,7 @@ name: schematize-qa
 metadata:
   version: 0.5.1
 description: >-
-  Q.A. agnóstica de linguagem: pirâmide de testes, smoke com asserção de conteúdo, a11y, regressão visual, contrato,
-  flaky, cobertura, gates de CI, plan-first. Use ao planejar ou auditar teste. Teste nunca dispara efeito externo
-  real.
+  Q.A. agnóstica de linguagem: pirâmide de testes, smoke com conteúdo, a11y, contrato, flaky, cobertura. Use ao planejar ou auditar teste. Teste nunca dispara efeito externo real.
 ---
 
 # Q.A. / Quality Assurance da Casa (schematize-qa)
@@ -38,6 +36,30 @@ Digite `/qa-help` pra ver todos. Em resumo:
 | `/qa-handoff` | gera o handoff (context.md + checklist.md) **sem** compactar — pra fim de sessão |
 
 Os comandos ficam em `assets/commands/` e são instalados em `.claude/commands/`.
+
+## Precedência e herança (leia antes de divergir)
+
+<!-- herdado:engineering/precedencia:dominio intro="Esta skill é o recorte **Q.A. (teste e prova)**, agnóstico de linguagem: **disciplina de domínio**, não linguagem — ela diz como o teste é escrito, rodado e gated; a base diz que ele tem de existir." cmd="qa" -->Esta skill é o recorte **Q.A. (teste e prova)**, agnóstico de linguagem: **disciplina de domínio**, não linguagem — ela diz como o teste é escrito, rodado e gated; a base diz que ele tem de existir.
+
+1. **Onde esta skill divergir da base, a BASE MANDA.** Aqui mora a especialização do domínio ou da
+   ferramenta — o como, o padrão, o gate. Divergência de *piso* é defeito desta skill, não variante local.
+2. **O que não está repetido aqui é HERDADO, não dispensado.** Esta skill herda os pisos da base e
+   os comandos dela cobrem o **domínio**, não o piso geral. Valem integralmente, sem cópia local:
+   - **§28 Archive** — `<projeto>/<projeto>_archive/` é **repositório git próprio, PRIVADO e
+     obrigatório**, criticidade 0 (`schematize-archive`).
+   - **§35 Definition of Done** e a lista de anti-padrões (citada por **título**, nunca por número).
+   - **§39 Índice/MAPA** — enumeração exaustiva (uma entrada por unidade chamável, `M == N`) e grafo
+     com arestas em ASCII (`A -> B`), nunca a seta unicode.
+   - **IAM** (`schematize-engineering` → `references/iam.md`): identidade ≠ email, ≥2 fatores, ReBAC
+     multi-tenant, argon2id-only para senha nova, sessão longa e logout irreversível.
+   - **Efeito externo** nunca sai de não-produção (`schematize-engineering` →
+     `references/efeitos-externos.md`).
+   - **Orquestração** (`schematize-engineering` → `references/orquestracao.md` §9): o principal não
+     desenvolve (é Claude Opus); executor mais barato que resolve — `haiku`/`sonnet` → Codex Terra → Cursor → `opus` só após falha; visual direto ao Codex; imagem nunca pelo Claude: detecta Codex/Gemini e pergunta ao usuário qual usar (Codex é a sugestão, não automática), nunca API paga.
+3. **QA, ops, IAM e índice não têm comando próprio aqui:** vêm da base `/eng-*`. Para trabalho
+   contínuo use `/eng-overdev`; para planejar `/eng-plan`; para varrer a base `/eng-scan`; para
+   revisão geral `/eng-review` (e `/eng-ops`, `/eng-iam`, `/eng-index`). Os comandos
+   `/qa-*` cobrem o domínio desta skill; o piso geral é o da base.<!-- /herdado -->
 
 ## Como usar esta skill
 
@@ -144,6 +166,7 @@ Não escreva do zero o que já está bundlado (movido da engineering pra cá):
 - `scripts/simulated/run.py` — scaffold do engine `rotas × personas × injections` (cobertura total de
   rotas: acessível pra quem deve, bloqueada pra quem não deve). O detalhe **ofensivo** das injeções é
   governado pela `schematize-pentest`; aqui o foco é **acessibilidade/cobertura de rota**.
+
 ## Relação com as outras skills
 
 - **schematize-engineering** — a **BASE**. Ela **exige** teste (DoD §35, archive §28, índice §39) e
@@ -161,6 +184,12 @@ Não escreva do zero o que já está bundlado (movido da engineering pra cá):
   **consome** essa evidência pra promover um `- [x]` de suspeito a fato.
 - **schematize-data** — parceira nos **testes de dados**: expectations, qualidade na borda, quarentena/
   DLQ e contrato de schema evolutivo. O *como testar dado* referencia a disciplina de dados dela.
+- **schematize-api** — dona do **contrato de API**: o spec OpenAPI/proto, o diff de breaking change e a
+  deprecação são dela (`schematize-api` → `references/`); aqui está o **teste** que prova que produtor e
+  consumidor cumprem o contrato (consumer-driven, validação request/response contra o schema).
+- **schematize-analytics** — dona do **tracking plan**: o evento é contrato e o gate é `check-tracking.sh`.
+  O teste de tracking (evento certo, propriedades fechadas, nada disparado sem consentimento) segue o
+  piso de Q.A. (vermelho plantado) mas a regra do evento mora lá.
 - **schematize-web** — parceira nos testes de **frontend**: componente (comportamento, não markup),
   e2e por seletor acessível, a11y e regressão visual casam com o piso de a11y/CWV do frontend.
 

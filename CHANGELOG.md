@@ -3,6 +3,17 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.6.0] — 2026-10-14
+Gate da skill-dev verde, bloco herdado de precedência e fronteiras com as skills novas.
+
+### Adicionado
+- `scripts/smoke-selfcheck.test.sh` e `test-skeleton.test.sh` com vermelho e verde plantados (servidor HTTP de brinquedo, runner cego): um gate sem vermelho plantado é decoração.
+- Bloco herdado `engineering/precedencia:dominio` no `SKILL.md` (faltava; o gate reprovava `herdado-ausente`).
+- `SKILL.md` e `references/categorias.md` §8: `schematize-api` é a dona do contrato de API (aqui só o teste que prova que é cumprido) e `schematize-analytics` é a dona do tracking plan (teste de tracking segue o mesmo padrão de contrato).
+
+### Alterado
+- Description 232 -> 177 chars (orçamento de listagem).
+
 ## [0.5.1] — 2026-10-14
 Ressincronização dos blocos herdados com a engineering v0.27.0; sem mudança de piso próprio.
 
