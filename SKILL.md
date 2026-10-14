@@ -4,8 +4,8 @@ metadata:
   version: 0.5.0
 description: >-
   Q.A. agnóstica de linguagem: pirâmide de testes, smoke com asserção de conteúdo, a11y, regressão visual, contrato,
-  flaky, cobertura e gates de CI, plan-first. Use ao planejar, escrever, rodar ou auditar teste ou configurar gate.
-  Teste nunca dispara efeito externo real.
+  flaky, cobertura, gates de CI, plan-first. Use ao planejar ou auditar teste. Teste nunca dispara efeito externo
+  real.
 ---
 
 # Q.A. / Quality Assurance da Casa (schematize-qa)
