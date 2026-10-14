@@ -209,120 +209,85 @@ pipeline dele; publicar sem verificar é empurrar o defeito para o consumidor de
 
 ## 9. Efeito externo — assertar e-mail/notificação SEM enviar de verdade
 
-Jornada real notifica: cadastro manda confirmação, login manda OTP, compra manda recibo, alerta manda
-push/SMS/webhook. Testar isso é **obrigatório** — o bug do template quebrado (`{{nome}}` cru, link
-apontando pra `localhost`) só aparece aqui.
+Jornada real notifica (confirmação, OTP, recibo, push/SMS/webhook), e testar isso é **obrigatório**: o
+bug do template quebrado (`{{nome}}` cru, link para `localhost`) só aparece aqui.
 
-> **Piso (não repetido aqui):** testar **enviando de verdade** é VETADO — normativa em
-> `schematize-engineering` → `references/efeitos-externos.md` e ADR-0004. **Ambiente e pré-flight:**
-> `references/execucao.md` §5. **Esta seção é só a ASSERÇÃO** — como provar que a mensagem certa
-> saiu, sem que ela saia.
+> **O piso e o desenho do sink não moram aqui.** Regra, domínio de teste em rota nula, guard
+> fail-closed, cap e a matriz do guard: `schematize-engineering → references/efeitos-externos.md`.
+> Ambiente e pré-flight: `references/execucao.md` §5. **Esta seção é só o específico de Q.A.: como
+> PROVAR, no teste, que a mensagem certa saiu para o sink e que o guard realmente guarda.**
 
-**A regra em uma linha:** o provider em teste é o **SINK**, e o teste **lê a caixa do sink por API**
-(Mailpit `GET /api/v1/messages`) — nunca uma caixa real, nunca "olha lá no Gmail se chegou".
+**Regra em uma linha:** o teste **lê a caixa do sink por API** (Mailpit `GET /api/v1/messages`) —
+nunca uma caixa real, nunca "olha lá no Gmail se chegou".
 
 ### 9.1 O ciclo da asserção (integração e e2e)
 
 1. **Limpar o sink** (`DELETE /api/v1/messages`) — isolamento por teste (`flaky.md` §3).
-2. **Disparar a ação de domínio** pela API/UI (cadastrar, pedir reset, finalizar pedido).
-3. **Esperar por CONDIÇÃO** — poll na API do sink até a mensagem do destinatário aparecer, com timeout
-  curto e erro claro. **Nunca `sleep(N)`** (`flaky.md` §3): envio é assíncrono, `sleep` é flaky.
-4. **Buscar por destinatário** (`?query=to:user+<run-id>-1@test.<domain>`), não "a última mensagem" —
-  "a última" quebra na hora que a suíte roda em paralelo.
+2. **Disparar a ação de domínio** pela API/UI.
+3. **Esperar por CONDIÇÃO** (poll no sink, timeout curto, erro claro) — nunca `sleep(N)`.
+4. **Buscar por destinatário** (`?query=to:user+<run-id>-1@test.<domain>`), nunca "a última mensagem"
+   (quebra em paralelo).
 5. **Assertar conteúdo** (§9.2) e seguir a jornada com o que veio do e-mail (token, link, código).
 
 **MUST**
-- **Contagem exata:** a ação gera **1** mensagem, não "≥1". Duplicata (retry do worker mandando duas
-  vezes) é bug que só esta asserção pega.
-- **O OTP/token do e2e vem do sink**, não de uma caixa real e **não** de um "modo de teste que devolve
-  o código na resposta da API" — expor OTP em response é buraco de segurança que vaza pra produção
-  (`schematize-pentest`). O sink é o canal legítimo.
-- **VETADO assertar "não deu erro no envio"** (`expect(sendMail).not.toThrow()`, `assert ok`): é teste
-  tautológico (§1 e piso 1) — passa com o template quebrado, com o destinatário errado e com o corpo
-  vazio.
+- **Contagem exata:** a ação gera **1** mensagem, não "≥1" (duplicata de retry só esta asserção pega).
+- **O OTP/token do e2e vem do sink**, não de caixa real nem de "modo de teste que devolve o código na
+  resposta da API" (buraco de segurança que vaza para prd — `schematize-pentest`).
+- **VETADO assertar "não deu erro no envio"** (`expect(sendMail).not.toThrow()`): tautológico (§1).
 
 ### 9.2 Asserção de conteúdo do template
 
-O e-mail é uma **saída do sistema** e se testa como qualquer outra: shape + conteúdo + assertion
-negativa (mesma disciplina do smoke, §5).
-
 | Assere | Exemplo |
 |---|---|
-| **destinatário exato** | `to == "user+r7f3a-1@test.<domain>"` — e o **domínio é o de teste** |
+| **destinatário exato** | `to == "user+r7f3a-1@test.<domain>"` (domínio de teste) |
 | **remetente e reply-to** | do subdomínio de envio do ambiente, não o de produção |
-| **assunto** | bate com o esperado do template (e com o **idioma/locale** da persona) |
-| **corpo — o dado que importa** | nome do usuário, valor do pedido, **código OTP no formato certo** |
-| **link** | host = o do ambiente sob teste, token presente, e o link **funciona** (segue e valida) |
-| **texto E HTML** | as duas partes existem e **contêm o mesmo dado** (multipart quebrado é clássico) |
+| **assunto** | bate com o template e com o **locale** da persona |
+| **corpo — o dado que importa** | nome, valor do pedido, **OTP no formato certo** |
+| **link** | host do ambiente sob teste, token presente, e o link **funciona** (segue e valida) |
+| **texto E HTML** | as duas partes existem e contêm o mesmo dado |
 
-**Assertion negativa obrigatória** — o e-mail **não** contém:
-- **placeholder não renderizado**: `{{`, `${`, `%s`, `<%=`, `undefined`, `null`, `NaN`;
-- stack trace, nome de exceção, caminho de arquivo do servidor;
-- **segredo** (chave de API, hash de senha, token de sessão de terceiro) ou **PII além da necessária**;
-- link pra `localhost`/host errado quando o ambiente não é local.
+**Assertion negativa obrigatória** — o e-mail **não** contém: placeholder não renderizado (`{{`, `${`,
+`%s`, `<%=`, `undefined`, `null`, `NaN`); stack trace ou caminho de servidor; segredo ou PII além da
+necessária; link para `localhost`/host errado fora de ambiente local.
 
-### 9.3 O teste NEGATIVO do guard (obrigatório — é o vermelho do guard)
+### 9.3 O teste NEGATIVO do guard (o vermelho do guard)
 
-O guard que recusa destinatário externo é uma **guarda**, e guarda vale pelo piso 1: **só conta se foi
-vista reprovar**. Sem este teste, o guard é uma linha de código que ninguém sabe se funciona — e foi
-exatamente assim que os 5.000 saíram.
+Guarda só conta se foi **vista reprovar** (piso 1). O QA escreve o caso que prova que o guard recusa, e
+roda a **matriz mínima** definida na engineering (feliz, destinatário externo, config ausente =
+fail-closed, bypass por parâmetro, cap N+1):
 
 ```
 teste "guard recusa destinatário externo fora de prd":
     dado  env = "hml", MAIL_PROVIDER = "sink", TEST_MAIL_DOMAIN = "test.<domain>"
     quando enviar(para: "alguem@gmail.com", template: "otp")
-    então  ESPERA erro                      # assertion negativa: a chamada FALHA
-      e    a mensagem cita o domínio de teste (mensagem acionável)
-      e    o SINK está VAZIO                # nada saiu, nem pro sink
-      e    o contador real_sent continua 0
+    então  ESPERA erro acionável (cita o domínio de teste)
+      e    o SINK está VAZIO e o contador real_sent continua 0
 ```
 
-**MUST — a matriz mínima do guard** (uma linha, um caso):
-
-| Caso | `env` | Destinatário | Esperado |
-|---|---|---|---|
-| feliz | `test`/`hml` | `@test.<domain>` | **entrega no sink**, 1 mensagem |
-| **guard (o vermelho)** | `test`/`hml` | `@gmail.com` | **ERRO**, sink **vazio** |
-| fail-closed | *(config de env ausente)* | `@gmail.com` | **ERRO** (assume não-prd) |
-| sem bypass | `test`/`hml` + flag `force=true` no chamador | `@gmail.com` | **ERRO** (guard não aceita bypass por parâmetro) |
-| **cap** | `test` | N+1 envios com `MAIL_MAX_PER_RUN=N` | **abort** no N+1, com erro acionável |
-
-- O caso do guard roda no **unit** (provider isolado, rápido) **e** é reexercido na **integração** com
-  o provider real da composição — o guard tem que valer no objeto que o app de fato usa, não só no
-  fake do teste.
-- **Se o caso do guard passar a "passar" (envio aceito), o CI quebra** — como qualquer guarda que
-  parou de guardar.
+- Roda no **unit** (provider isolado) **e** é reexercido na **integração** com o provider real da
+  composição — o guard tem que valer no objeto que o app usa, não só no fake.
+- Se o caso do guard passar a "passar" (envio aceito), **o CI quebra**.
 
 ### 9.4 SMS, push e webhook
 
-Mesmo padrão, mesmo oráculo: provider **sink** (número mágico do provedor / projeto de push de teste /
-receptor HTTP local — **nunca** `webhook.site`, que é público, e nunca a URL do parceiro), asserção
-lendo do sink, contagem exata, teste negativo do guard e cap por execução. SMS **custa por unidade**:
-o cap importa mais, não menos.
-
-> Um teste que "manda o e-mail de verdade pra ver se chega" não prova mais do que o sink prova — prova
-> só que você tem uma caixa a menos e um domínio mais queimado.
+Mesmo oráculo: sink (número mágico / projeto de push de teste / receptor HTTP local — **nunca**
+`webhook.site`, **nunca** a URL do parceiro), leitura do sink, contagem exata, negativo do guard e cap.
+SMS custa por unidade: o cap importa mais.
 
 ---
 
 ## 10. `simulated` — cobertura total de rota
 
-> **De quem é o arsenal.** O `scripts/simulated/run.py` desta skill carrega payloads de SQLi, XSS,
-> path traversal, mass assignment e coerção de tipo — **arsenal ofensivo dentro da skill de Q.A.**,
-> enquanto a `schematize-pentest` (a dona da disciplina) não tem script nenhum. Isso é
-> **deliberado**, e a razão é a fronteira: o `simulated` **não é pentest** — é o gate de
-> **cobertura de rota × persona** que prova acessibilidade e isolamento, e as injeções entram ali
-> como **caso hostil de regressão**, executado no CI, com oráculo binário (nunca 500, nunca eco sem
-> escape, nunca vazamento cross-tenant).
+> **De quem é a matriz.** O oráculo de **rejeição** (SQLi, XSS, path traversal, mass assignment,
+> coerção de tipo, authz, hardening) tem **dono único: `schematize-pentest → references/appsec-rejeicao.md`**
+> — é lá que a matriz canônica (o que testar, o critério PASS/FAIL, a severidade) vive. Esta skill
+> **não a redefine**.
 >
-> **O que muda de lado:** a **exploração** (encadear achados, PoC, red-team, escolha de vetor) é da
-> `schematize-pentest` e **não** roda no CI — roda sob autorização, escopo e RoE. Se um payload
-> daqui vira exploração, ele **saiu** do `simulated` e entrou no engajamento.
->
-> **Consequência prática:** manter o payload aqui é o que permite que ele seja **regressão
-> permanente**; movê-lo para a pentest o transformaria em teste manual. O que a `schematize-pentest`
-> mantém é a **matriz** (o que testar e por quê) — e ela consome esta saída
-> (`references/appsec-rejeicao.md`).
+> O que é de Q.A. é a **execução e a integração no runner**: o `scripts/simulated/run.py` pode
+> executar esses payloads no CI como **caso hostil de regressão** (oráculo binário: nunca 500, nunca eco
+> sem escape, nunca vazamento cross-tenant), consumindo a matriz da pentest. Exploração (encadear
+> achados, PoC, red-team) é da `schematize-pentest`, sob autorização, escopo e RoE, e **não** roda no
+> CI: se um payload vira exploração, ele saiu do `simulated` e entrou no engajamento.
 
 Engine (`scripts/simulated/run.py`) que cruza **rotas × personas × injections** e prova, por persona,
 que **cada rota do inventário** responde como esperado — acessível pra quem deve, `403`/`401` pra quem
@@ -339,16 +304,14 @@ não deve.
 - Saída: `raw.jsonl` (uma linha/request), `report.md` (seções **AUTO** e **REVIEW**), `summary.json`.
   Personas mínimas (`superadmin`, `tenant_admin`, `normal_user`) em `personas.json`.
 
-> **Fronteira com a pentest:** o `simulated` daqui garante **cobertura e acessibilidade** de rota (Q.A.
-> — "cada rota faz o certo pra quem deve"). A matriz **adversarial** — provar que cada campo **rejeita**
-> injeção/coerção/cross-tenant, rota por rota — é da **schematize-pentest** (`/pentest-endpoints`,
+> **Fronteira com a pentest:** o `simulated` garante **cobertura e acessibilidade** de rota ("cada
+> rota faz o certo pra quem deve"). A matriz **adversarial** (cada campo **rejeita** injeção/coerção/
+> cross-tenant) é da `schematize-pentest → references/appsec-rejeicao.md` (`/pentest-endpoints`,
 > `/pentest-authz`). Reutilizam o mesmo catalog de rotas; mudam o oráculo.
 
-**Modos de segurança no test kit** (`security`, `pentest`, `authz`, `hardening`): o **harness**
-(CLI, saída, seeds) é compartilhado e mora no test kit (`execucao.md`), mas o **conteúdo ofensivo** de
-cada um — os payloads, os critérios de rejeição, a severidade/gate — é **governado pela
-schematize-pentest**. Q.A. roda o harness e coleta o resultado; a pentest define o que é ataque e o que
-é PASS/FAIL de segurança.
+**Modos de segurança no runner** (`security`, `pentest`, `authz`, `hardening`): o harness (CLI, saída,
+seeds) é do test kit (`execucao.md`); o conteúdo ofensivo (payloads, critérios, severidade/gate) é
+**governado pela `schematize-pentest`**. Q.A. roda e coleta; a pentest define PASS/FAIL de segurança.
 
 ---
 

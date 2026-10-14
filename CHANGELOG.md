@@ -3,6 +3,15 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.0] — 2026-10-14
+Fronteira qa x pentest e corte de duplicação com a base.
+
+### Corrigido
+- **`categorias.md` §10 dizia que a pentest "não tem script nenhum"** — falso (`pentest-gate.mjs`, `pentest-report.mjs`, `contar-rotas.sh`). A passagem foi reescrita sem a afirmação.
+- **Oráculo de rejeição com dono único.** A matriz de SQLi/XSS/authz/hardening é de `schematize-pentest → references/appsec-rejeicao.md`; o qa virou ponteiro e mantém só a execução/integração no `simulated`. Referência sem prefixo foi prefixada.
+- **§9 (efeito externo) enxugada** de ~100 para ~60 linhas: piso, guard e matriz ficam em `schematize-engineering → references/efeitos-externos.md`; aqui resta como provar o sink e o vermelho do guard. Removida citação a ADR que o leitor não consegue ler (`execucao.md`).
+- Description ≤350 em YAML válido (`>-`); o escalar anterior era inválido.
+
 ## [0.4.2] — 2026-09-30
 O piso de orquestração passa a ser **herdado** da base em vez de copiado à mão: uma mudança na engineering não exige mais editar 38 arquivos.
 

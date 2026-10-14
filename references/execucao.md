@@ -210,7 +210,7 @@ detalhe de fixture.
 
 > **A normativa do piso NÃO mora aqui.** Ela é da base: `schematize-engineering` →
 > `references/efeitos-externos.md` (as 4 camadas: DNS em rota nula, provider sink por default,
-> guard deny-by-default dentro do provider, cap por execução) e o ADR-0004. Esta seção cobre **só o
+> guard deny-by-default dentro do provider, cap por execução). Esta seção cobre **só o
 > recorte de Q.A.**: como o *runner* e o *ambiente de teste* realizam esse piso.
 >
 > *(Este arquivo repetia a normativa inteira, e ela aparecia mais 3 vezes na skill — 22% das

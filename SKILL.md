@@ -2,7 +2,8 @@
 name: schematize-qa
 metadata:
   version: 0.4.2
-description: Q.A. da casa — a disciplina inteira de TESTE, agnóstica de linguagem, que prova que o software faz o que diz COM EVIDÊNCIA, não por fé. Rege a pirâmide (unit → componente → integração → e2e); o princípio de que teste testa COMPORTAMENTO, não "renderizou"; o "verde de verdade" (smoke com asserção de conteúdo + assertion negativa + self-check que força uma falha conhecida — smoke que nunca falha está cego); a11y (axe/WCAG 2.2 AA) e regressão visual como testes que travam; contrato e dados; flaky (detecção, determinismo, quarentena com prazo e dono); cobertura útil, não vaidade; o fluxo plan-first (planeja, gera o MD, PEDE APROVAÇÃO antes de rodar); os gates de CI que travam o merge e não se desligam "temporariamente"; e o Q.A. como parte da DoD. Use SEMPRE que for planejar, escrever, revisar, rodar ou auditar QUALQUER teste, definir cobertura, tratar flaky ou configurar gate de CI. Pisos: teste é visto FALHAR no vermelho; cobertura é contrato; teste NUNCA dispara efeito externo real — confere-se lendo do sink.
+description: >-
+  Q.A. da casa, agnóstica de linguagem: pirâmide de testes, smoke com asserção de conteúdo e self-check, a11y, regressão visual, contrato, flaky, cobertura e gates de CI, em fluxo plan-first. Use ao planejar, escrever, revisar, rodar ou auditar qualquer teste, definir cobertura ou configurar gate. Teste nunca dispara efeito externo real.
 ---
 
 # Q.A. / Quality Assurance da Casa (schematize-qa)
