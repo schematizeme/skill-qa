@@ -3,7 +3,9 @@ name: schematize-qa
 metadata:
   version: 0.4.2
 description: >-
-  Q.A. da casa, agnóstica de linguagem: pirâmide de testes, smoke com asserção de conteúdo e self-check, a11y, regressão visual, contrato, flaky, cobertura e gates de CI, em fluxo plan-first. Use ao planejar, escrever, revisar, rodar ou auditar qualquer teste, definir cobertura ou configurar gate. Teste nunca dispara efeito externo real.
+  Q.A. agnóstica de linguagem: pirâmide de testes, smoke com asserção de conteúdo, a11y, regressão visual, contrato,
+  flaky, cobertura e gates de CI, plan-first. Use ao planejar, escrever, rodar ou auditar teste ou configurar gate.
+  Teste nunca dispara efeito externo real.
 ---
 
 # Q.A. / Quality Assurance da Casa (schematize-qa)
