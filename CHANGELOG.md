@@ -6,6 +6,10 @@ com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 ## [0.6.0] — 2026-10-14
 Gate da skill-dev verde, bloco herdado de precedência e fronteiras com as skills novas.
 
+### Corrigido
+
+- `test-skeleton.test.sh`/`smoke-selfcheck.test.sh`: o `trap` de limpeza vira função com `p` local (fim do SC2154); scripts no piso de shell.
+
 ### Adicionado
 - `scripts/smoke-selfcheck.test.sh` e `test-skeleton.test.sh` com vermelho e verde plantados (servidor HTTP de brinquedo, runner cego): um gate sem vermelho plantado é decoração.
 - Bloco herdado `engineering/precedencia:dominio` no `SKILL.md` (faltava; o gate reprovava `herdado-ausente`).
