@@ -1,7 +1,7 @@
 ---
 name: schematize-qa
 metadata:
-  version: 0.4.2
+  version: 0.5.0
 description: >-
   Q.A. agnóstica de linguagem: pirâmide de testes, smoke com asserção de conteúdo, a11y, regressão visual, contrato,
   flaky, cobertura e gates de CI, plan-first. Use ao planejar, escrever, rodar ou auditar teste ou configurar gate.
@@ -21,7 +21,7 @@ e o comando `eng-qa`, hoje removido) pra rodar solta e agnóstica de linguagem. 
 mínimo** — "a DoD exige testes verdes" — e delega o **COMO** pra cá. Onde a engenharia diz *que* tem
 que ter teste, esta skill diz *como* o teste é escrito, rodado, medido e gated.
 
-**Versão:** skill `schematize-qa` v0.4.2. Changelog em `CHANGELOG.md`.
+**Versão:** skill `schematize-qa` v0.5.0. Changelog em `CHANGELOG.md`.
 
 ## Comandos (Claude Code)
 
