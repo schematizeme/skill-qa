@@ -3,6 +3,13 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.7.0] — 2026-10-15
+### Alterado
+- Aponta para `schematize-regression` onde a fronteira corta: regressão visual (piso 5 e `categorias.md` §7
+  mantêm o gate; o ciclo do baseline vai para `regression/visual.md`), regressão de perf (§13) e a
+  seção de relação com as outras skills (bug nunca volta, caracterização, bisect).
+- Porquê: a regression foi criada como dona do ciclo "o bug não volta"; sem ponteiro, o QA e ela divergiriam.
+
 ## [0.6.0] — 2026-10-14
 Gate da skill-dev verde, bloco herdado de precedência e fronteiras com as skills novas.
 

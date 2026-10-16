@@ -114,7 +114,9 @@ Independente do reference, estes limites nunca são cruzados:
    FAIL. Smoke que nunca falha está cego.
 5. **Acessibilidade e regressão visual TRAVAM.** a11y (axe/WCAG 2.2 AA — teclado, foco, contraste,
    nome acessível) e regressão visual são gate, não relatório opcional. Violação de a11y bloqueia o
-   merge como qualquer teste vermelho.
+   merge como qualquer teste vermelho. O ciclo completo do baseline visual (criar, atualizar com diff
+   revisado, tolerância, determinismo) é da `schematize-regression` → `references/visual.md`; o piso
+   acima (trava o merge, `-u` nunca em massa) vale igual aqui.
 6. **Teste flaky é BUG, não "re-roda".** Flaky por corrida/tempo/estado é defeito. Detecta, torna
    determinístico, ou coloca em **quarentena com prazo e dono** (issue rastreável) — **nunca** silencia
    pra sempre nem esconde com retry infinito no gate.
@@ -187,6 +189,10 @@ Não escreva do zero o que já está bundlado (movido da engineering pra cá):
 - **schematize-api** — dona do **contrato de API**: o spec OpenAPI/proto, o diff de breaking change e a
   deprecação são dela (`schematize-api` → `references/`); aqui está o **teste** que prova que produtor e
   consumidor cumprem o contrato (consumer-driven, validação request/response contra o schema).
+- **schematize-regression** — dona do ciclo **"bug corrigido nunca volta"**: teste vermelho antes do
+  fix, teste de caracterização (golden master) antes de refatorar legado, baseline de perf e visual,
+  `git bisect`. Aqui ficam a estratégia, a pirâmide e as categorias; lá, o que impede o MESMO defeito
+  de retornar (`schematize-regression` → `references/`).
 - **schematize-analytics** — dona do **tracking plan**: o evento é contrato e o gate é `check-tracking.sh`.
   O teste de tracking (evento certo, propriedades fechadas, nada disparado sem consentimento) segue o
   piso de Q.A. (vermelho plantado) mas a regra do evento mora lá.

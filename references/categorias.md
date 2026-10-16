@@ -170,6 +170,9 @@ Percy/Chromatic/Loki.
 - **Escopo por componente** (preferido) além de páginas inteiras — diff pequeno é revisável; página
   inteira vira ruído.
 
+> O ciclo operacional do baseline (criar, `-u` com diff revisado, política de tolerância, gate no CI)
+> está em `schematize-regression` → `references/visual.md`. Este §7 é o piso; não duplique lá o que está aqui.
+
 ---
 
 ## 8. Contrato e dados
@@ -446,7 +449,8 @@ mutation. É por isso que a skill chama line coverage de **piso** e mutation de 
 
 - **Todo endpoint crítico** tem SLO escrito **e** um cenário de carga que o exercita. Endpoint
   crítico sem cenário = **cobertura faltante**, não "sem problema".
-- **Regressão:** p95 pior que **+10%** contra o baseline do último release reprova; taxa de erro
+- **Regressão** (baseline de perf versionado e comparação por release: `schematize-regression` →
+  `references/desempenho.md`): p95 pior que **+10%** contra o baseline do último release reprova; taxa de erro
   acima do SLO reprova **sempre**, sem tolerância percentual.
 - **Soak:** ≥ **1h** no nightly de release, com **memória estável** (crescimento < 5% após o
   aquecimento) — o vazamento só aparece no tempo.
